@@ -1,0 +1,40 @@
+DROP TABLE IF EXISTS MOVIE_CHARACTER_MAP;
+DROP TABLE IF EXISTS MOVIE_GENRE_MAP;
+DROP TABLE IF EXISTS MOVIE;
+DROP TABLE IF EXISTS PERSON;
+DROP TYPE IF EXISTS GENRE;
+DROP TYPE IF EXISTS ROLE;
+
+CREATE TYPE ROLE AS ENUM ('ACTOR', 'DIRECTOR');
+
+CREATE TYPE GENRE AS ENUM ('HORROR', 'ACTION', 'ROMANCE', 'THRILLER', 'COMEDY');
+
+CREATE TABLE PERSON (
+  id INT AUTO_INCREMENT  PRIMARY KEY,
+  first_name VARCHAR(250) NOT NULL,
+  last_name VARCHAR(250),
+  role ROLE
+);
+
+CREATE TABLE MOVIE (
+  id INT AUTO_INCREMENT  PRIMARY KEY,
+  movie_name VARCHAR(250) NOT NULL,
+  release_date TIMESTAMP NOT NULL,
+  age_recommendation INTEGER NOT NULL,
+  rating INTEGER,
+  description VARCHAR(500)
+);
+
+CREATE TABLE MOVIE_GENRE_MAP (
+  id INT AUTO_INCREMENT  PRIMARY KEY,
+  genre GENRE NOT NULL,
+  movie_id INT NOT NULL,
+  constraint movie_genre_map_movie_id_fk foreign key (movie_id) REFERENCES MOVIE(id)
+);
+
+CREATE TABLE MOVIE_CHARACTER_MAP (
+  movie_id INT NOT NULL,
+  person_id INT NOT NULL,
+  constraint movie_character_map_person_id_fk foreign key (person_id) REFERENCES PERSON(id),
+  constraint movie_character_map_movie_id_fk foreign key (movie_id) REFERENCES MOVIE(id)
+);
